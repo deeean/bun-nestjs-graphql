@@ -3,11 +3,17 @@ import { AppService } from "./app.service.ts";
 import { AppController } from "./app.controller.ts";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
-import { PetsModule } from "./pets/pets.module.ts";
 import { MongooseModule } from "@nestjs/mongoose";
+import { AuthModule } from "./auth/auth.module.ts";
+import { UserModule } from "./users/user.module.ts";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
@@ -16,7 +22,8 @@ import { MongooseModule } from "@nestjs/mongoose";
     MongooseModule.forRoot("mongodb://root:root@localhost:27017", {
       dbName: 'bun_nestjs_graphql'
     }),
-    PetsModule,
+    AuthModule,
+    UserModule,
   ],
   controllers: [
     AppController,
